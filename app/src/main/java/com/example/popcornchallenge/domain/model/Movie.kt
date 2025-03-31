@@ -1,4 +1,4 @@
-package com.example.popcornchallenge.core.model.data
+package com.example.popcornchallenge.domain.model
 
 data class Movie(
     val id: Int,
