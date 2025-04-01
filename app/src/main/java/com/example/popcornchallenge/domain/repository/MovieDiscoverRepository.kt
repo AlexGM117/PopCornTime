@@ -7,8 +7,9 @@ import com.example.popcornchallenge.domain.model.Movie
 import com.example.popcornchallenge.data.remote.IMDBRemoteDataSource
 import com.example.popcornchallenge.presentation.ui.MovieDiscoverPagingSource
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class MovieDiscoverRepository(
+class MovieDiscoverRepository @Inject constructor(
     private val remoteDataSource: IMDBRemoteDataSource
 ) : IMovieDiscoverRepository {
     override fun getMovies(): Flow<PagingData<Movie>> {

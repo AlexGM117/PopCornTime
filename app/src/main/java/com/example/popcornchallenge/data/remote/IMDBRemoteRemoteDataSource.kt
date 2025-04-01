@@ -6,8 +6,9 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.path
+import javax.inject.Inject
 
-class IMDBRemoteRemoteDataSource(private val ktorClient: HttpClient) : IMDBRemoteDataSource {
+class IMDBRemoteRemoteDataSource @Inject constructor(private val ktorClient: HttpClient) : IMDBRemoteDataSource {
 
     @Suppress("NAME_SHADOWING", "UNREACHABLE_CODE")
     override suspend fun getMovieList(page: Int): DiscoverMovie {

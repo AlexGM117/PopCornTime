@@ -4,8 +4,9 @@ import androidx.paging.PagingData
 import com.example.popcornchallenge.domain.model.Movie
 import com.example.popcornchallenge.domain.repository.IMovieDiscoverRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class GetMovieDiscoverUseCase(
+class GetMovieDiscoverUseCase @Inject constructor(
     private val movieRepository: IMovieDiscoverRepository
 ) {
     operator fun invoke(): Flow<PagingData<Movie>> {

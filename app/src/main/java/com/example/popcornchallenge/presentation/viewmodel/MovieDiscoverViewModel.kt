@@ -6,11 +6,14 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.popcornchallenge.domain.model.Movie
 import com.example.popcornchallenge.domain.usecase.GetMovieDiscoverUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MovieDiscoverViewModel(
+@HiltViewModel
+class MovieDiscoverViewModel @Inject constructor(
     private val movieDiscoverUseCase: GetMovieDiscoverUseCase
 ) : ViewModel() {
     private val _movieState: MutableStateFlow<PagingData<Movie>> = MutableStateFlow(PagingData.empty())
@@ -19,7 +22,7 @@ class MovieDiscoverViewModel(
         onEvent(DiscoverEvent.GetMovies)
     }
 
-    fun onEvent(event: DiscoverEvent) {
+    private fun onEvent(event: DiscoverEvent) {
         when (event) {
             is DiscoverEvent.GetMovies -> {
                 viewModelScope.launch {
@@ -27,7 +30,7 @@ class MovieDiscoverViewModel(
                 }
             }
 
-            is DiscoverEvent.NavigateDetail -> TODO()
+            is DiscoverEvent.NavigateDetail -> Unit
         }
     }
 

@@ -87,8 +87,9 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
-    ksp(libs.dagger.hilt.android.compiler)
     implementation(libs.dagger.hilt.android)
+    implementation(libs.dagger.hilt.navigation.compose)
+    ksp(libs.androidx.hilt.compiler)
 
     // Test dependencies
     testImplementation(libs.junit)
