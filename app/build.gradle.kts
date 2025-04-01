@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt.android)
+    alias(libs.plugins.ksp)
     id("kotlin-parcelize")
 }
 
@@ -84,6 +86,9 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.kotlinx.serialization.json)
+
+    ksp(libs.dagger.hilt.android.compiler)
+    implementation(libs.dagger.hilt.android)
 
     // Test dependencies
     testImplementation(libs.junit)
