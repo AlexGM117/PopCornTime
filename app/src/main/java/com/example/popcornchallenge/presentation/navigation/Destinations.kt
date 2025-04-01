@@ -2,5 +2,8 @@ package com.example.popcornchallenge.presentation.navigation
 
 import kotlinx.serialization.Serializable
 
-@Serializable data object First
-@Serializable data object Second
+@Serializable
+object MovieDiscover
+
+@Serializable
+data class MovieDetail(val id: Int)

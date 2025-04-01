@@ -1,28 +1,22 @@
 package com.example.popcornchallenge.domain.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.popcornchallenge.domain.model.Movie
 import com.example.popcornchallenge.data.remote.IMDBRemoteDataSource
+import com.example.popcornchallenge.presentation.ui.MovieDiscoverPagingSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 class MovieDiscoverRepository(
-    private val network: IMDBRemoteDataSource
+    private val remoteDataSource: IMDBRemoteDataSource
 ) : IMovieDiscoverRepository {
-    override fun getMovies(page: Int): Flow<List<Movie>>  = flow {
-        val movieList = network.getMovieList(page)
-            .results.map {
-                Movie(
-                    id = it.id,
-                    title = it.title,
-                    overview = it.overview,
-                    posterPath = it.posterPath,
-                    releaseDate = it.releaseDate,
-                    popularity = it.popularity,
-                    originalLanguage = it.originalLanguage,
-                    originalTitle = it.originalTitle
-                )
+    override fun getMovies(): Flow<PagingData<Movie>> {
+        return Pager(
+            config = PagingConfig(pageSize = 10),
+            pagingSourceFactory = {
+                MovieDiscoverPagingSource(remoteDataSource)
             }
-
-        emit(movieList)
+        ).flow
     }
 }

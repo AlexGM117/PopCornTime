@@ -1,42 +1,46 @@
 package com.example.popcornchallenge.presentation.screens
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_4_XL
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.popcornchallenge.core.network.ktor.KtorNetworkClient
 import com.example.popcornchallenge.data.remote.IMDBRemoteRemoteDataSource
+import com.example.popcornchallenge.domain.model.Movie
 import com.example.popcornchallenge.domain.repository.MovieDiscoverRepository
+import com.example.popcornchallenge.domain.usecase.GetMovieDiscoverUseCase
+import com.example.popcornchallenge.presentation.components.MovieCard
+import com.example.popcornchallenge.presentation.viewmodel.DiscoverEvent
 import com.example.popcornchallenge.presentation.viewmodel.MovieDiscoverViewModel
 
 @Composable
-fun DiscoverMovieScreen(innerPadding: PaddingValues, onClick: () -> Unit) {
-    MovieDiscoverViewModel(
-        MovieDiscoverRepository(IMDBRemoteRemoteDataSource(KtorNetworkClient.client)
-        )
-    )
-    DiscoverMovieScreenContent(innerPadding, onClick)
+fun DiscoverMovieScreen(innerPadding: PaddingValues, onEvent: (DiscoverEvent) -> Unit) {
+    val viewModel = MovieDiscoverViewModel(GetMovieDiscoverUseCase(MovieDiscoverRepository(IMDBRemoteRemoteDataSource(KtorNetworkClient.client))))
+    val moviePagingItems: LazyPagingItems<Movie> = viewModel.movieState.collectAsLazyPagingItems()
+    DiscoverMovieScreenContent(innerPadding, moviePagingItems, onEvent)
 }
 
 @Composable
-fun DiscoverMovieScreenContent(innerPadding: PaddingValues, onClick: () -> Unit) {
-    Column(
+fun DiscoverMovieScreenContent(
+    innerPadding: PaddingValues,
+    moviePagingItems: LazyPagingItems<Movie>,
+    onEvent: (DiscoverEvent) -> Unit
+) {
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(2),
         modifier = Modifier
             .padding(innerPadding)
-            .fillMaxSize()
     ) {
-        repeat(5) {
-            Text(text = "Movie title", modifier = Modifier.clickable { onClick.invoke() })
-            Spacer(modifier = Modifier.height(8.dp))
+        items(moviePagingItems.itemCount) { index ->
+            moviePagingItems[index]?.let { movie ->
+                MovieCard(movie = movie, onEvent = onEvent)
+            }
         }
     }
 }
@@ -49,5 +53,5 @@ fun DiscoverMovieScreenContent(innerPadding: PaddingValues, onClick: () -> Unit)
 )
 @Composable
 private fun DiscoverScreenPreview() {
-    DiscoverMovieScreenContent(PaddingValues(all = 16.dp)) {}
+
 }
